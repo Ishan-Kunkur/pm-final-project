@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spotlight Roadmap</title>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --surface-2: #f0f2f7;
+    --text: #1a1d29;
+    --muted: #5d6478;
+    --border: #e1e4ee;
+    --accent: #5b4bff;
+    --accent-soft: #ecebff;
+    --shadow: 0 1px 2px rgba(20,23,40,.06), 0 4px 14px rgba(20,23,40,.06);
+
+    --q-quick: #12805c;  --q-quick-bg: #e3f6ee;
+    --q-big:   #2f5bd8;  --q-big-bg:   #e6edfd;
+    --q-fill:  #9a6a00;  --q-fill-bg:  #fdf3dc;
+    --q-sink:  #c2353d;  --q-sink-bg:  #fde8e9;
+
+    --now: #5b4bff; --next: #0f8fa8; --later: #7a7f93; --cut: #c2353d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1117; --surface: #181b24; --surface-2: #20242f; --text: #e8eaf2;
+      --muted: #9aa1b5; --border: #2a2f3c; --accent: #8b80ff; --accent-soft: #262245;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+      --q-quick: #4fd1a1; --q-quick-bg: #133a2d;
+      --q-big: #7fa2ff;   --q-big-bg: #1b2a52;
+      --q-fill: #f0c05a;  --q-fill-bg: #3a2f12;
+      --q-sink: #ff7b82;  --q-sink-bg: #431c20;
+      --now: #8b80ff; --next: #3cc4dd; --later: #9aa1b5; --cut: #ff7b82;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1117; --surface: #181b24; --surface-2: #20242f; --text: #e8eaf2;
+    --muted: #9aa1b5; --border: #2a2f3c; --accent: #8b80ff; --accent-soft: #262245;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+    --q-quick: #4fd1a1; --q-quick-bg: #133a2d;
+    --q-big: #7fa2ff;   --q-big-bg: #1b2a52;
+    --q-fill: #f0c05a;  --q-fill-bg: #3a2f12;
+    --q-sink: #ff7b82;  --q-sink-bg: #431c20;
+    --now: #8b80ff; --next: #3cc4dd; --later: #9aa1b5; --cut: #ff7b82;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 28px 16px 48px; }
+
+  header { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), #c04bff); color: #fff; font-weight: 800; font-size: 18px;
+  }
+  h1 { margin: 0; font-size: 22px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .team { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    font-size: 12px; padding: 5px 10px; border-radius: 999px; background: var(--surface);
+    border: 1px solid var(--border); color: var(--muted); white-space: nowrap;
+  }
+
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 12px; margin-bottom: 20px; box-shadow: var(--shadow);
+  }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .legend .label { font-size: 12px; color: var(--muted); margin-right: 4px; }
+  .chip {
+    border: 1px solid transparent; cursor: pointer; font: inherit; font-size: 12px; font-weight: 600;
+    padding: 5px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
+    transition: opacity .15s, transform .1s;
+  }
+  .chip:active { transform: scale(.97); }
+  .chip.off { opacity: .35; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .actions { display: flex; gap: 6px; }
+  .btn {
+    font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; padding: 6px 12px; border-radius: 8px;
+    background: var(--surface-2); color: var(--text); border: 1px solid var(--border);
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  .q-quick { color: var(--q-quick); background: var(--q-quick-bg); }
+  .q-big   { color: var(--q-big);   background: var(--q-big-bg); }
+  .q-fill  { color: var(--q-fill);  background: var(--q-fill-bg); }
+  .q-sink  { color: var(--q-sink);  background: var(--q-sink-bg); }
+
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .board { grid-template-columns: 1fr; } }
+
+  .lane {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px; min-height: 220px; display: flex; flex-direction: column; transition: background .15s, border-color .15s;
+  }
+  .lane.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+  .lane-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .lane-title { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px; letter-spacing: .06em; }
+  .lane-title .bar { width: 4px; height: 18px; border-radius: 2px; }
+  .count {
+    font-size: 12px; font-weight: 700; color: var(--muted); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 999px; padding: 1px 9px;
+  }
+  .lane-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .cards { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
+    box-shadow: var(--shadow); cursor: grab; position: relative; border-left: 4px solid var(--lane-color, var(--accent));
+    transition: transform .12s, box-shadow .12s, opacity .15s;
+  }
+  .card:hover { transform: translateY(-1px); }
+  .card.dragging { opacity: .4; }
+  .card.hidden { display: none; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .id { font-size: 11px; font-weight: 800; color: var(--muted); letter-spacing: .05em; }
+  .name { font-weight: 700; font-size: 15px; margin: 1px 0 0; }
+  .badge {
+    flex-shrink: 0; font-size: 11px; font-weight: 700; border-radius: 6px; padding: 3px 8px; cursor: pointer;
+    border: none; font-family: inherit; white-space: nowrap;
+  }
+  .badge:hover { filter: brightness(.95); }
+  .why { font-size: 13px; color: var(--muted); margin: 0; }
+  .why b { color: var(--text); font-weight: 600; }
+  .empty { font-size: 12px; color: var(--muted); text-align: center; padding: 18px 8px; border: 1px dashed var(--border); border-radius: 10px; }
+
+  .cut-section {
+    margin-top: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; box-shadow: var(--shadow);
+  }
+  .cut-section.drag-over { border-color: var(--cut); }
+  .cut-section .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .cut-section .card { --lane-color: var(--cut); background: var(--surface-2); box-shadow: none; }
+  .cut-section .name { text-decoration: line-through; text-decoration-color: var(--cut); text-decoration-thickness: 2px; }
+
+  .hint { font-size: 12px; color: var(--muted); text-align: center; margin-top: 18px; }
+
+  @media print {
+    .toolbar, .hint { display: none; }
+    .card { box-shadow: none; break-inside: avoid; }
+    .board { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">S</div>
+      <div>
+        <h1>StreamLine Spotlight · Roadmap</h1>
+        <div class="sub">Now / Next / Later prioritization</div>
+      </div>
+    </div>
+    <div class="team">
+      <span class="pill">👩‍💻 2 Engineers</span>
+      <span class="pill">🎨 1 Designer</span>
+      <span class="pill">⏱ 3-week sprints</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="legend" id="legend">
+      <span class="label">Quadrant filter:</span>
+    </div>
+    <div class="actions">
+      <button class="btn" id="printBtn">Print / PDF</button>
+      <button class="btn" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <div class="board">
+    <section class="lane" data-lane="now" style="--lane-color: var(--now)">
+      <div class="lane-head">
+        <div class="lane-title"><span class="bar" style="background:var(--now)"></span>NOW</div>
+        <span class="count" data-count="now">0</span>
+      </div>
+      <div class="lane-desc">Current 3-week sprint</div>
+      <div class="cards" data-drop="now"></div>
+    </section>
+
+    <section class="lane" data-lane="next" style="--lane-color: var(--next)">
+      <div class="lane-head">
+        <div class="lane-title"><span class="bar" style="background:var(--next)"></span>NEXT</div>
+        <span class="count" data-count="next">0</span>
+      </div>
+      <div class="lane-desc">Following 1–2 sprints</div>
+      <div class="cards" data-drop="next"></div>
+    </section>
+
+    <section class="lane" data-lane="later" style="--lane-color: var(--later)">
+      <div class="lane-head">
+        <div class="lane-title"><span class="bar" style="background:var(--later)"></span>LATER</div>
+        <span class="count" data-count="later">0</span>
+      </div>
+      <div class="lane-desc">Backlog</div>
+      <div class="cards" data-drop="later"></div>
+    </section>
+  </div>
+
+  <section class="cut-section" data-lane="cut">
+    <div class="lane-head">
+      <div class="lane-title"><span class="bar" style="background:var(--cut)"></span>✂️ CUT LIST</div>
+      <span class="count" data-count="cut">0</span>
+    </div>
+    <div class="lane-desc">Deliberately out of scope for Spotlight</div>
+    <div class="cards" data-drop="cut"></div>
+  </section>
+
+  <p class="hint">Drag cards between lanes · Click a quadrant badge to change it · Click legend chips to filter</p>
+</div>
+
+<script>
+  const QUADRANTS = {
+    quick: { label: "Quick Win",     cls: "q-quick", desc: "High value · Low effort" },
+    big:   { label: "Big Bet",       cls: "q-big",   desc: "High value · High effort" },
+    fill:  { label: "Fill-in",       cls: "q-fill",  desc: "Low value · Low effort" },
+    sink:  { label: "Time Sink",     cls: "q-sink",  desc: "Low value · High effort" }
+  };
+  const Q_ORDER = ["quick", "big", "fill", "sink"];
+
+  const DEFAULT = [
+    { id: "A1",  name: "Spotlight Curated Rail",       lane: "now",   q: "quick", why: "Low-effort quick win that shows users we're actively addressing their concerns." },
+    { id: "A2",  name: "'Why You'll Love This' Label", lane: "now",   q: "quick", why: "Addresses a major pain point immediately." },
+    { id: "A4",  name: "Mood-Based Entry Point",       lane: "next",  q: "big",   why: "Great for Wanderers — directs them to titles based on what they're in the mood for." },
+    { id: "A7",  name: "Curator Profiles",             lane: "next",  q: "big",   why: "Genre-specialist editors earn trust badges and curate paths for viewers to discover films they'd like but didn't know about." },
+    { id: "A3",  name: "Hidden Gem Badge",             lane: "later", q: "fill",  why: "Nice to have and may spark curiosity, but won't immediately solve navigation concerns." },
+    { id: "A5",  name: "Personalized Spotlight Queue", lane: "later", q: "big",   why: "More time-consuming. Needs to be more than just a generic AI recommendation." },
+    { id: "A9",  name: "Advanced Filter Engine",       lane: "later", q: "fill",  why: "Low effort, but also low value." },
+    { id: "A6",  name: "Spotlight Digest Email",       lane: "cut",   q: "fill",  why: "No value as a product feature." },
+    { id: "A8",  name: "Watch Party (Spotlight)",      lane: "cut",   q: "sink",  why: "No value add for this product feature." },
+    { id: "A10", name: "Offline Download (Spotlight)", lane: "cut",   q: "sink",  why: "No value add feature." }
+  ];
+
+  const KEY = "spotlight-roadmap-v1";
+  let items = load();
+  let activeFilters = new Set(Q_ORDER);
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch (e) {}
+    return JSON.parse(JSON.stringify(DEFAULT));
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {}
+  }
+
+  function buildLegend() {
+    const legend = document.getElementById("legend");
+    Q_ORDER.forEach(k => {
+      const q = QUADRANTS[k];
+      const b = document.createElement("button");
+      b.className = "chip " + q.cls;
+      b.dataset.q = k;
+      b.title = q.desc;
+      b.innerHTML = `<span class="dot"></span>${q.label}`;
+      b.addEventListener("click", () => {
+        if (activeFilters.has(k)) activeFilters.delete(k); else activeFilters.add(k);
+        if (activeFilters.size === 0) Q_ORDER.forEach(x => activeFilters.add(x));
+        render();
+      });
+      legend.appendChild(b);
+    });
+  }
+
+  function render() {
+    document.querySelectorAll("[data-drop]").forEach(z => z.innerHTML = "");
+    const counts = { now: 0, next: 0, later: 0, cut: 0 };
+
+    items.forEach(it => {
+      const q = QUADRANTS[it.q];
+      const card = document.createElement("article");
+      card.className = "card";
+      card.draggable = true;
+      card.dataset.id = it.id;
+      if (!activeFilters.has(it.q)) card.classList.add("hidden");
+      card.innerHTML = `
+        <div class="card-top">
+          <div>
+            <div class="id">${it.id}</div>
+            <h3 class="name">${it.name}</h3>
+          </div>
+          <button class="badge ${q.cls}" title="${q.desc} — click to change">${q.label}</button>
+        </div>
+        <p class="why"><b>Rationale:</b> ${it.why}</p>`;
+
+      card.querySelector(".badge").addEventListener("click", e => {
+        e.stopPropagation();
+        it.q = Q_ORDER[(Q_ORDER.indexOf(it.q) + 1) % Q_ORDER.length];
+        save(); render();
+      });
+      card.addEventListener("dragstart", e => {
+        card.classList.add("dragging");
+        e.dataTransfer.setData("text/plain", it.id);
+        e.dataTransfer.effectAllowed = "move";
+      });
+      card.addEventListener("dragend", () => card.classList.remove("dragging"));
+
+      document.querySelector(`[data-drop="${it.lane}"]`).appendChild(card);
+      counts[it.lane]++;
+    });
+
+    Object.entries(counts).forEach(([lane, n]) => {
+      document.querySelector(`[data-count="${lane}"]`).textContent = n;
+      const zone = document.querySelector(`[data-drop="${lane}"]`);
+      if (n === 0) zone.innerHTML = `<div class="empty">Drop a card here</div>`;
+    });
+
+    document.querySelectorAll(".chip").forEach(c => c.classList.toggle("off", !activeFilters.has(c.dataset.q)));
+  }
+
+  function setupDrop() {
+    document.querySelectorAll("[data-lane]").forEach(laneEl => {
+      const lane = laneEl.dataset.lane;
+      laneEl.addEventListener("dragover", e => { e.preventDefault(); laneEl.classList.add("drag-over"); });
+      laneEl.addEventListener("dragleave", e => {
+        if (!laneEl.contains(e.relatedTarget)) laneEl.classList.remove("drag-over");
+      });
+      laneEl.addEventListener("drop", e => {
+        e.preventDefault();
+        laneEl.classList.remove("drag-over");
+        const id = e.dataTransfer.getData("text/plain");
+        const idx = items.findIndex(x => x.id === id);
+        if (idx < 0) return;
+        const [moved] = items.splice(idx, 1);
+        moved.lane = lane;
+
+        // insert relative to card under cursor
+        const zone = laneEl.querySelector("[data-drop]");
+        const after = [...zone.querySelectorAll(".card:not(.dragging)")].find(c => {
+          const r = c.getBoundingClientRect();
+          return e.clientY < r.top + r.height / 2;
+        });
+        if (after) {
+          const target = items.findIndex(x => x.id === after.dataset.id);
+          items.splice(target, 0, moved);
+        } else {
+          items.push(moved);
+        }
+        save(); render();
+      });
+    });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (!confirm("Reset roadmap to the original prioritization?")) return;
+    items = JSON.parse(JSON.stringify(DEFAULT));
+    activeFilters = new Set(Q_ORDER);
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    render();
+  });
+  document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+  buildLegend();
+  setupDrop();
+  render();
+</script>
+</body>
+</html>
